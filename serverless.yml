@@ -1,0 +1,54 @@
+
+service: aws-node-http-api-project
+frameworkVersion: "3"
+
+plugins:
+  - serverless-functions-base-path
+  - serverless-plugin-lambda-dead-letter
+  - serverless-iam-roles-per-function
+  - serverless-prune-plugin
+  - serverless-webpack
+  - serverless-offline
+
+custom:
+  App_Name: my-function
+  TopicName: failureTopic
+  Email: deepayankundu6@gmail.com
+  stage: dev
+  region: ap-south-1
+
+  prune:
+    automatic: true
+    number: 5
+
+  webpack:
+    webpackConfig: webpack.config.js
+    includeModules: true
+    packager: npm
+
+provider:
+  name: aws
+  runtime: nodejs18.x
+  stage: dev
+  tags:
+    MyTag: Deep-Exp
+  region: ap-south-1
+
+  environment:
+    MyEnv: "Deepayan Kundu"
+    topicname: ${self:custom.TopicName}
+    topicArn: arn:aws:sns:${aws:region}:${aws:accountId}:${self:custom.TopicName}
+    topicEmail: ${self:custom.Email}
+    lambdaName: ${self:custom.App_Name}
+
+package:
+  individually: false
+  exclude:
+    - package.json
+    - package-lock.json
+
+functions:
+  - ${file(lambda.yml)}
+
+resources:
+  - ${file(SNS-${self:provider.stage}.yml)}
