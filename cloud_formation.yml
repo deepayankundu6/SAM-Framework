@@ -8,9 +8,9 @@ Resources:
       TopicName: ${self:custom.TopicName}
 
   Parameters:
-    Type: String
-    Default: NA
-    Description: My EXP parameter
-    ParameterKey: ${self:custom.parameterName}
-    ParameterValue: NA
-    UsePreviousValue: true
+    Type: AWS::SSM::Parameter
+    Properties:
+      Type: String
+      Description: My EXP parameter
+      Value: NA
+      Name: ${self:custom.parameterName}
