@@ -14,7 +14,7 @@ hello:
         - ssm:GetParameter
         - ssm:PutParameter
       Resource:
-        - arn:aws:ssm:${aws:region}:${aws:accountId}:parameter/${self:custom.parameterName}
+        - arn:aws:ssm:${aws:region}:${aws:accountId}:parameter${self:custom.parameterName}
     - Effect: Allow
       Action:
         - sns:Publish
