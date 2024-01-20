@@ -1,27 +1,23 @@
 "use strict";
 const awsSdk = require('aws-sdk');
-const dotenv = require('dotenv');
-dotenv.config();
-awsSdk.config.update({ region: 'ap-south-1' });
 
-module.exports.hello = async (event) => {
+module.exports.execute = async (event) => {
   console.log("Function started at: ", new Date());
-  console.log("Function Executing");
 
   try {
     let current_date = new Date().toISOString();
     var params = {
-      Name: "/Deep-PAR/lse-mp",
+      Name: process.env.parameterName ,
       Value: current_date,
       Overwrite: true
     }
     console.log("SNS topic Emamil ID: ", process.env.topicEmail)
     const ssm = new awsSdk.SSM();
-    let previousSavedParam = await ssm.getParameter({ Name: "/Deep-PAR/lse-mp" }).promise();
+    let previousSavedParam = await ssm.getParameter({ Name: process.env.parameterName }).promise();
     console.log(previousSavedParam)
     await ssm.putParameter(params).promise();
     console.log("Saved the parameter in param store")
-    let savedParam = await ssm.getParameter({ Name: "/Deep-PAR/lse-mp" }).promise();
+    let savedParam = await ssm.getParameter({ Name: process.env.parameterName }).promise();
     console.log(savedParam)
 
     console.log("Function Executed successfully");
@@ -29,7 +25,7 @@ module.exports.hello = async (event) => {
       statusCode: 200,
       body: JSON.stringify(
         {
-          message: "Go Serverless v3.0! Your function executed successfully!",
+          message: "Your function executed successfully!",
           input: event,
         },
         null,
@@ -41,7 +37,7 @@ module.exports.hello = async (event) => {
     console.log("Some error occured during execution: ", err);
     let sns = new awsSdk.SNS();
     let ssm = new awsSdk.SSM();
-    let led = await ssm.getParameter({ Name: "/Deep-PAR/lse-mp" }).promise();
+    let led = await ssm.getParameter({ Name: process.env.parameterName }).promise();
     let snsParams = {
       TopicArn: process.env.topicArn,
       Message: `Hey your lambda has encountered an error on: ${new Date().toISOString()} please check the logs for the error details and cascade to to others if required.

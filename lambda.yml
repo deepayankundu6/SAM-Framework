@@ -1,20 +1,5 @@
-# ErrorHandler:
-#   handler: failure.hello
-#   runtime: nodejs18.x
-#   name: ${self:custom.App_Name}-failure
-#   memorySize: 256
-#   timeout: 300
-#   logRetentionInDays: 30
-#   iamRoleStatementsName: ErrorRole
-#   iamRoleStatements:
-#     - Effect: Allow
-#       Action:
-#         - sns:Publish
-#       Resource:
-#         - arn:aws:sns:${aws:region}:${aws:accountId}:${self:custom.TopicName}
-
 hello:
-  handler: handler.hello
+  handler: handler.execute
   runtime: nodejs18.x
   name: ${self:custom.App_Name}
   memorySize: 256
@@ -22,14 +7,14 @@ hello:
   logRetentionInDays: 30
   destinations:
     onFailure: arn:aws:sns:${aws:region}:${aws:accountId}:${self:custom.TopicName}
-  iamRoleStatementsName: MyRole
+  iamRoleStatementsName: MySNSExpLambdaRole
   iamRoleStatements:
     - Effect: Allow
       Action:
         - ssm:GetParameter
         - ssm:PutParameter
       Resource:
-        - arn:aws:ssm:${aws:region}:${aws:accountId}:parameter/Deep-PAR/*
+        - arn:aws:ssm:${aws:region}:${aws:accountId}:parameter/${self:custom.parameterName}
     - Effect: Allow
       Action:
         - sns:Publish

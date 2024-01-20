@@ -1,0 +1,16 @@
+Resources:
+  SNSTopic:
+    Type: AWS::SNS::Topic
+    Properties:
+      Subscription:
+        - Endpoint: ${self:custom.Email}
+          Protocol: "email"
+      TopicName: ${self:custom.TopicName}
+
+  Parameters:
+    Type: String
+    Default: NA
+    Description: My EXP parameter
+    ParameterKey: ${self:custom.parameterName}
+    ParameterValue: NA
+    UsePreviousValue: true
