@@ -1,0 +1,6 @@
+  App_Name: my-exp-function
+  TopicName: failureTopic
+  Email: deepayankundu6@gmail.com
+  stage: prod
+  region: ap-south-1
+  parameterName: /Deep-PAR/lse-mp

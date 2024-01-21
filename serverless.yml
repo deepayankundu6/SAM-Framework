@@ -11,12 +11,12 @@ plugins:
   - serverless-offline
 
 custom:
-  App_Name: my-exp-function
-  TopicName: failureTopic
-  Email: deepayankundu6@gmail.com
-  stage: prod
-  region: ap-south-1
-  parameterName: /Deep-PAR/lse-mp
+  App_Name: ${file(environment.yml):App_Name}
+  TopicName: ${file(environment.yml):TopicName}
+  Email: ${file(environment.yml):Email}
+  stage: ${file(environment.yml):stage}
+  region: ${file(environment.yml):region}
+  parameterName: ${file(environment.yml):parameterName}
 
   prune:
     automatic: true
@@ -29,12 +29,9 @@ custom:
 
 provider:
   name: aws
-  runtime: nodejs18.x
+  runtime: nodejs20.x
   stage: ${self:custom.stage}
-  tags:
-    MyTag: Deep-Exp
-  region: ap-south-1
-
+  region: ${self:custom.region}
   environment:
     topicName: ${self:custom.TopicName}
     topicArn: arn:aws:sns:${aws:region}:${aws:accountId}:${self:custom.TopicName}
