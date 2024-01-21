@@ -1,6 +1,6 @@
 hello:
   handler: handler.execute
-  runtime: nodejs18.x
+  runtime: nodejs20.x
   name: ${self:custom.App_Name}
   memorySize: 256
   timeout: 300
