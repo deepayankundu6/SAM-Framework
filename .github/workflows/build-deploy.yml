@@ -8,7 +8,7 @@ env:
   AWS_DEFAULT_OUTPUT: "json"
 on:
   push:
-    branches: [main]
+    branches: [master]
 jobs:
   workflow:
     runs-on: ubuntu-latest
@@ -28,7 +28,7 @@ jobs:
           aws --version
       - name: Getting AWS credentials
         run: |
-          curl -X GET "${{ secrets.API_DOMAIN }}/prod/users/authenticate"  -H "x-api-key: ${{ secrets.API_KEY }}" -o data.json
+          curl -X GET "${{ secrets.API_DOMAIN }}/prod/authenticate/users"  -H "x-api-key: ${{ secrets.API_KEY }}" -o data.json
       - name: Configuring AWS credentials
         run: |
           echo "AWS_ACCESS_KEY_ID=$(jq -r '.aws_access_key_id' data.json)" >> "$GITHUB_ENV"    
@@ -48,4 +48,5 @@ jobs:
           export AWS_SECRET_ACCESS_KEY=""           
           export AWS_DEFAULT_REGION="" 
           export AWS_DEFAULT_OUTPUT=""  
-          echo "All AWS credentials removing"       
+          rm data.json
+          echo "All AWS credentials removed"       
